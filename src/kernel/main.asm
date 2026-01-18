@@ -41,7 +41,7 @@ puts:
 	pop si
 	ret
 
-msg_hello: db 'Hello, world from the kernel!', ENDL, 0
+msg_hello: db 'Hello, world from kernel!', ENDL, 0
 
 
 times 510-($-$$) db 0

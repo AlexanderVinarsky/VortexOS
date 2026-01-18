@@ -1,6 +1,8 @@
 #include "stdint.h"
+#include "stdio.h"
 
-void __cdecl cstart_(uint16_t bootDrive)
+void _cdecl cstart_(uint16_t bootDrive)
 {
-    (void)bootDrive;
+    puts("Max and Chloe from C!");
+    for(;;);
 }
