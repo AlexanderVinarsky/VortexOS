@@ -107,7 +107,7 @@ start:
 	mov bx, buffer							; es:bx = buffer
 	call disk_read
 
-	; search for kernel.bin
+	; search for stage2.bin
 	xor bx, bx
 	mov di, buffer
 
