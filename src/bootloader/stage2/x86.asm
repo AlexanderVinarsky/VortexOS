@@ -3,9 +3,53 @@ bits 16
 section _TEXT class=CODE
 
 ;
+; void _cdecl x86_div64_32(uint64_t divideent, uint32_t divisor, uint64_t* quotientOut, uint64_t* remainderOut);
+;
+global _x86_div64_32
+global x86_div64_32_
+_x86_div64_32:
+_x86_div64_32_:
+
+    ; make new call frame
+    push bp             ; save old call frame
+    mov bp, sp          ; initialize new call frame
+
+    push bx
+
+    ; divide upper 32 bits
+    mov eax, [bp + 4]   ; eax
+    mov ecx, [bp + 12]  ; eax <- divisor
+    xor edx, edx
+    div ecx             ; eax - quotient, edx - remainder
+
+    ; store upper 32 bits of quotient
+    mov bx, [bp + 16]
+    mov [bx + 4], eax
+
+    ; divide lower 32 bits
+    mov eax, [bp + 4]   ; eax <- lower 32 bits of dividend
+                        ; edx <- old remainder
+    div ecx
+
+    ; store results
+    mov [bx], eax
+    mov bx, [bp + 18]
+    mov [bx], edx
+
+    pop bx
+
+    ; restore old call frame
+    mov sp, bp
+    pop bp
+    ret
+
+
+
+;
 ; int 10h ah=0Eh
 ; args: character, page
 ;
+
 global _x86_Video_WriteCharTeletype
 _x86_Video_WriteCharTeletype:
 

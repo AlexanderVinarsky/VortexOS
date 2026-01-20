@@ -1,3 +1,5 @@
-stdint.h(10): Warning! W138: No newline at end of file
-stdio.h(5): Warning! W138: No newline at end of file
-x86.h(3): Warning! W138: No newline at end of file
+stdint.h(13): Warning! W138: No newline at end of file
+stdio.h(6): Warning! W138: No newline at end of file
+stdint.h(13): Warning! W138: No newline at end of file
+x86.h(5): Warning! W138: No newline at end of file
+stdint.h(13): Warning! W138: No newline at end of file

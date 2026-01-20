@@ -3,6 +3,6 @@
 
 void _cdecl cstart_(uint16_t bootDrive)
 {
-    puts("Max and Chloe from C!");
-    for(;;);
+    printf("Formatted %% %c %s\r\n", 'a', "string");
+    for (;;);
 }
