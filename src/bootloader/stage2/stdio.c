@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "x86.h"
-#include "stdint.h"
+
+typedef bool __test_bool_type;
 
 void putc(char c)
 {
@@ -66,6 +67,7 @@ void _cdecl printf(const char* fmt, ...)
                                 break;
                 default:        goto PRINTF_STATE_SPEC_;
                 }
+                break;
 
             case PRINTF_STATE_LENGTH_SHORT:
                 if (*fmt == 'h')
@@ -187,7 +189,7 @@ int* printf_number(int* argp, int length, bool sign, int radix)
         case PRINTF_LENGTH_LONG_LONG:
             if (sign)
             {
-                long int n = *(long long int*)argp;
+                long long int n = *(long long int*)argp;
                 if (n < 0)
                 {
                     n = -n;

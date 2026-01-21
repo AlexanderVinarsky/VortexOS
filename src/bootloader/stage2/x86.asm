@@ -17,7 +17,7 @@ _x86_div64_32_:
     push bx
 
     ; divide upper 32 bits
-    mov eax, [bp + 4]   ; eax
+    mov eax, [bp + 8]   ; eax
     mov ecx, [bp + 12]  ; eax <- divisor
     xor edx, edx
     div ecx             ; eax - quotient, edx - remainder
