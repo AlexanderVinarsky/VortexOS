@@ -1,12 +1,40 @@
 #include "stdint.h"
 #include "stdio.h"
+#include "disk.h"
+#include "fat.h"
 
+void far* g_data = (void far*)0x00500200;
 
 void _cdecl cstart_(uint16_t bootDrive)
 {
-    puts("Putc beytes test\r\n");
-    printf("Formatted %% %c %s\r\n", 'a', "string");
-    printf("Formatted %d %i %x %p %o %hd %hi %hhu %hhd\r\n", 6767, -6767, 0xadda, 0xeadda, 06767, (short)67, (short)-67, (unsigned char)67, (char)-67);
-    printf("Formatted %ld %lx %lld %llx\r\n", -100000000l, 0xbebel, 10201233304ll, 0xdadadaeddaull);
+    DISK disk;
+    if (!DISK_Initialize(&disk, bootDrive))
+    {
+        printf("Disk init error\r\n");
+        goto end;
+    }
+
+    DISK_ReadSectors(&disk, 19, 1, g_data);
+
+    if (!FAT_Initialize(&disk))
+    {
+        printf("FAT init error\r\n");
+        goto end;
+    }
+
+    // browse files in root
+    FAT_File far* fd = FAT_Open(&disk, "/");
+    FAT_DirectoryEntry entry;
+    int i = 0;
+    while (FAT_ReadEntry(&disk, fd, &entry) && i++ < 5)
+    {
+        printf("  ");
+        for (int i = 0; i < 11; i++)
+            putc(entry.Name[i]);
+        printf("\r\n");
+    }
+    FAT_Close(fd);
+
+end:
     for (;;);
 }

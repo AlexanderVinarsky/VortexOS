@@ -1,6 +1,10 @@
 #include "fat.h"
 #include "stdio.h"
 #include "memdefs.h"
+#include "utility.h"
+#include "string.h"
+#include "memory.h"
+#include "ctype.h"
 
 #define SECTOR_SIZE             512
 #define MAX_PATH_SIZE           256
@@ -67,6 +71,10 @@ typedef struct
 static FAT_Data far* g_Data;
 static uint8_t far* g_Fat = NULL;
 static uint32_t g_DataSectionLba;
+
+
+
+
 
 
 bool FAT_ReadBootSector(DISK* disk)
@@ -142,7 +150,7 @@ uint32_t FAT_ClusterToLba(uint32_t cluster)
     return g_DataSectionLba + (cluster - 2) * g_Data->BS.BootSector.SectorsPerCluster;
 }
 
-FAT_File far* FAT_Open(DISK* disk, FAT_DirectoryEntry* entry)
+FAT_File far* FAT_OpenEntry(DISK* disk, FAT_DirectoryEntry* entry)
 {
     // find empty handle
     int handle = -1;
@@ -181,9 +189,15 @@ FAT_File far* FAT_Open(DISK* disk, FAT_DirectoryEntry* entry)
 
 
 
+uint32_t FAT_NextCluster(uint32_t currentCluster)
+{    
+    uint32_t fatIndex = currentCluster * 3 / 2;
 
-
-
+    if (currentCluster % 2 == 0)
+        return (*(uint16_t far*)(g_Fat + fatIndex)) & 0x0FFF;
+    else
+        return (*(uint16_t far*)(g_Fat + fatIndex)) >> 4;
+}
 
 
 uint32_t FAT_Read(DISK* disk, FAT_File far* file, uint32_t byteCount, void* dataOut)
@@ -270,7 +284,7 @@ void FAT_Close(FAT_File far* file)
     }
 }
 
-
+/*
 bool readFile(DirectoryEntry* fileEntry, FILE* disk, uint8_t* outputBuffer)
 {
     bool ok = true;
@@ -289,7 +303,7 @@ bool readFile(DirectoryEntry* fileEntry, FILE* disk, uint8_t* outputBuffer)
     } while (ok && currentCluster < 0x0FF8);
 
     return ok;
-}
+}*/
 
 bool FAT_FindFile(DISK* disk, FAT_File far* file, const char* name, FAT_DirectoryEntry* entryOut)
 {
@@ -325,7 +339,7 @@ bool FAT_FindFile(DISK* disk, FAT_File far* file, const char* name, FAT_Director
     return false;
 }
 
-FAT_File* FAT_Open(DISK* disk, const char* path)
+FAT_File far* FAT_Open(DISK* disk, const char* path)
 {
     char name[MAX_PATH_SIZE];
 
