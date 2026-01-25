@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta Mar  1 2021 00:26:29 (32-bit)
 Copyright (c) 2002-2021 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       26/01/24 04:07:14
+Created on:       26/01/25 21:51:18
 Executable Image: /home/vinarsky/VortexOS/build/stage2.bin
 creating a RAW Binary Image executable
 
@@ -13,7 +13,7 @@ creating a RAW Binary Image executable
 Group                           Address              Size
 =====                           =======              ====
 
-DGROUP                          00001846             00000164
+DGROUP                          00001906             0000016c
 
 
 
@@ -25,11 +25,11 @@ Segment                Class          Group          Address         Size
 =======                =====          =====          =======         ====
 
 _ENTRY                 CODE           AUTO           00000000        00000012
-_TEXT                  CODE           AUTO           00000012        00001833
-CONST                  DATA           DGROUP         00001846        00000141
-CONST2                 DATA           DGROUP         00001988        00000011
-_DATA                  DATA           DGROUP         0000199a        00000008
-_BSS                   BSS            DGROUP         000019a2        00000008
+_TEXT                  CODE           AUTO           00000012        000018f4
+CONST                  DATA           DGROUP         00001906        0000014a
+CONST2                 DATA           DGROUP         00001a50        00000011
+_DATA                  DATA           DGROUP         00001a62        00000008
+_BSS                   BSS            DGROUP         00001a6a        00000008
 
 
                         +----------------+
@@ -66,28 +66,28 @@ Module: /home/vinarsky/VortexOS/build/stage2/c/fat.obj(/home/vinarsky/VortexOS/s
 00000633+      FAT_ClusterToLba_
 00000689+      FAT_OpenEntry_
 00000853+      FAT_NextCluster_
-000008dc+      FAT_Read_
+000008dc       FAT_Read_
 00000c40       FAT_ReadEntry_
 00000c99       FAT_Close_
 00000d17+      FAT_FindFile_
 00000e51       FAT_Open_
 Module: /home/vinarsky/VortexOS/build/stage2/c/main.obj(/home/vinarsky/VortexOS/src/bootloader/stage2/main.c)
 00000fcb       _cstart_
-0000199e+      _g_data
+00001a66+      _g_data
 Module: /home/vinarsky/VortexOS/build/stage2/c/memory.obj(/home/vinarsky/VortexOS/src/bootloader/stage2/memory.c)
-000010b9       memcpy_
-00001131       memset_
-00001190       memcmp_
+0000117a       memcpy_
+000011f2       memset_
+00001251       memcmp_
 Module: /home/vinarsky/VortexOS/build/stage2/c/stdio.obj(/home/vinarsky/VortexOS/src/bootloader/stage2/stdio.c)
-0000120d       putc_
-00001234+      puts_
-0000126b       _printf
-000014c7+      printf_number_
-00001988+      _g_HexChars
+000012ce       putc_
+000012f5+      puts_
+0000132c       _printf
+00001588+      printf_number_
+00001a50+      _g_HexChars
 Module: /home/vinarsky/VortexOS/build/stage2/c/string.obj(/home/vinarsky/VortexOS/src/bootloader/stage2/string.c)
-0000173b       strchr_
-00001796+      strcpy_
-0000180a       strlen_
+000017fc       strchr_
+00001857+      strcpy_
+000018cb       strlen_
 
 
                         +---------------------+
@@ -104,45 +104,45 @@ main.asm        _ENTRY                CODE           00000000         00000012
 x86.asm         _TEXT                 CODE           00000012         00000112
 /home/vinarsky/VortexOS/src/bootloader/stage2/ctype.c
                 _TEXT                 CODE           00000124         00000086
-                CONST                 DATA           00001846         00000000
-                CONST2                DATA           00001988         00000000
-                _DATA                 DATA           0000199a         00000000
+                CONST                 DATA           00001906         00000000
+                CONST2                DATA           00001a50         00000000
+                _DATA                 DATA           00001a62         00000000
 /home/vinarsky/VortexOS/src/bootloader/stage2/disk.c
                 _TEXT                 CODE           000001aa         000001c6
-                CONST                 DATA           00001846         00000000
-                CONST2                DATA           00001988         00000000
-                _DATA                 DATA           0000199a         00000000
+                CONST                 DATA           00001906         00000000
+                CONST2                DATA           00001a50         00000000
+                _DATA                 DATA           00001a62         00000000
 /home/vinarsky/VortexOS/src/bootloader/stage2/fat.c
                 _TEXT                 CODE           00000370         00000c5b
-                CONST                 DATA           00001846         00000116
-                CONST2                DATA           00001988         00000000
-                _DATA                 DATA           0000199a         00000004
-                _BSS                  BSS            000019a2         00000008
+                CONST                 DATA           00001906         00000116
+                CONST2                DATA           00001a50         00000000
+                _DATA                 DATA           00001a62         00000004
+                _BSS                  BSS            00001a6a         00000008
 /home/vinarsky/VortexOS/src/bootloader/stage2/main.c
-                _TEXT                 CODE           00000fcb         000000ee
-                CONST                 DATA           0000195c         0000002b
-                CONST2                DATA           00001988         00000000
-                _DATA                 DATA           0000199e         00000004
+                _TEXT                 CODE           00000fcb         000001af
+                CONST                 DATA           00001a1c         00000034
+                CONST2                DATA           00001a50         00000000
+                _DATA                 DATA           00001a66         00000004
 /home/vinarsky/VortexOS/src/bootloader/stage2/memory.c
-                _TEXT                 CODE           000010b9         00000154
-                CONST                 DATA           00001988         00000000
-                CONST2                DATA           00001988         00000000
-                _DATA                 DATA           000019a2         00000000
+                _TEXT                 CODE           0000117a         00000154
+                CONST                 DATA           00001a50         00000000
+                CONST2                DATA           00001a50         00000000
+                _DATA                 DATA           00001a6a         00000000
 /home/vinarsky/VortexOS/src/bootloader/stage2/stdio.c
-                _TEXT                 CODE           0000120d         0000052e
-                CONST                 DATA           00001988         00000000
-                CONST2                DATA           00001988         00000011
-                _DATA                 DATA           000019a2         00000000
+                _TEXT                 CODE           000012ce         0000052e
+                CONST                 DATA           00001a50         00000000
+                CONST2                DATA           00001a50         00000011
+                _DATA                 DATA           00001a6a         00000000
 /home/vinarsky/VortexOS/src/bootloader/stage2/string.c
-                _TEXT                 CODE           0000173b         0000010a
-                CONST                 DATA           00001988         00000000
-                CONST2                DATA           0000199a         00000000
-                _DATA                 DATA           000019a2         00000000
+                _TEXT                 CODE           000017fc         0000010a
+                CONST                 DATA           00001a50         00000000
+                CONST2                DATA           00001a62         00000000
+                _DATA                 DATA           00001a6a         00000000
 /home/vinarsky/VortexOS/src/bootloader/stage2/utility.c
-                _TEXT                 CODE           00001845         00000000
-                CONST                 DATA           00001988         00000000
-                CONST2                DATA           0000199a         00000000
-                _DATA                 DATA           000019a2         00000000
+                _TEXT                 CODE           00001906         00000000
+                CONST                 DATA           00001a50         00000000
+                CONST2                DATA           00001a62         00000000
+                _DATA                 DATA           00001a6a         00000000
 Warning! W1014: stack segment not found
 
 
@@ -151,6 +151,6 @@ Warning! W1014: stack segment not found
                         +-----------------------+
 
 Stack size:  0200 (512.)
-Memory size:  19aa (6570.)
+Memory size:  1a72 (6770.)
 Entry point address: 00000000
 Link time: 00:00.00
