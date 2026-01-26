@@ -284,27 +284,6 @@ void FAT_Close(FAT_File far* file)
     }
 }
 
-/*
-bool readFile(DirectoryEntry* fileEntry, FILE* disk, uint8_t* outputBuffer)
-{
-    bool ok = true;
-    uint16_t currentCluster = fileEntry->FirstClusterLow;
-
-    do {
-        uint32_t lba = g_RootDirectoryEnd + (currentCluster - 2) * g_BootSector.SectorsPerCluster;
-        ok = ok && readSectors(disk, lba, g_BootSector.SectorsPerCluster, outputBuffer);
-        outputBuffer += g_BootSector.SectorsPerCluster * g_BootSector.BytesPerSector;
-        
-        uint32_t fatIndex = currentCluster * 3 / 2;
-        if (currentCluster % 2 == 0)
-            currentCluster = (*(uint16_t*)(g_Fat + fatIndex)) & 0x0FFF;
-        else
-            currentCluster = (*(uint16_t*)(g_Fat + fatIndex)) >> 4;
-    } while (ok && currentCluster < 0x0FF8);
-
-    return ok;
-}*/
-
 bool FAT_FindFile(DISK* disk, FAT_File far* file, const char* name, FAT_DirectoryEntry* entryOut)
 {
     char fatName[12];
