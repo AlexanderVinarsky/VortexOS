@@ -1,7 +1,10 @@
 org 0x7C00
 bits 16
 
-; stack setup
+
+; from Intel® 64 and IA-32 Architectures Software Developer Manuals
+
+; stack setup 
 entry:
     mov ax, 0
     mov ds, ax
@@ -14,6 +17,33 @@ entry:
     call EnableA20      ; 2 - Enable A20 Gate
     call LoadGDT        ; 3 - Load Global Descriptor Table
 
+    ; 4 - set protection enable flag in CR0
+    mov eax, cr0
+    or al, 1
+    mov cr0, eax
+
+    ; 5 - far jump into protected mode
+    jmp dword 08h:.pmode
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+.pmode:
+    ; now opeating in 32-bit protected mode
+    [bits 32]
+    
+    ; 6 - segment registers setup 
+    mov ax, 0x10
+    mov ds, ax 
+    mov ss, ax
+
+    ; print a message
+    mov esi, g_Chloe
+    mov edi, ScreenBuffer
+    cld 
 
 
 
@@ -23,9 +53,33 @@ entry:
 
 
 
+.loop:
+    lodsb
+    or al, al
+    jz .done 
+
+    mov [edi], al 
+    inc edi 
+
+    mov [edi], byte 0x3
+    inc edi 
+    jmp .loop
+
+
+
+
+
+
+.done:
+
+
+.halt:
+    hlt
+    jmp .halt
 
 
 EnableA20:
+    [bits 16]
     ; disable keyboardd
     call A20WaitInput
     mov al, KbdControllerDisableKeyboard
@@ -72,6 +126,7 @@ EnableA20:
 ;
 
 A20WaitInput:
+    [bits 16]
     ; wait until status bit 2 (input buffer) is 0
     ; readding status byte via command port
     in al, KbdControllerCommandPort
@@ -80,14 +135,17 @@ A20WaitInput:
     ret
 
 A20WaitOutput:
+    [bits 16]
     ; waint until satus bit 1, so it can be read
     in al, KbdControllerCommandPort
     test al, 1
     jz A20WaitOutput
     ret
 
-.halt:
-    jmp .halt
+LoadGDT:
+    [bits 16]
+    lgdt [g_GDTDesc]
+    ret
 
 KbdControllerDataPort               equ 0x60
 KbdControllerCommandPort            equ 0x64
@@ -95,6 +153,8 @@ KbdControllerDisableKeyboard        equ 0xAD
 KbdControllerEnableKeyboard         equ 0xAE
 KbdControllerReadCtrlOutputPort     equ 0xD0
 KbdControllerWriteCtrlOutputPort    equ 0xD1
+
+ScreenBuffer                        equ 0xB8000
 
 g_GDT:      ; NULL descriptor
             dq 0
@@ -129,7 +189,13 @@ g_GDT:      ; NULL descriptor
             db 0                    
             db 10010010b            ; access (...,      -> data <-    segment, ...)
             db 00001111b            ; granularity (     -> 1b pages, 16-bit <-     pmode) ...
-            db 0                   
+            db 0         
+
+
+g_GDTDesc:  dw g_GDTDesc - g_GDT - 1 ; limit = size of GDT
+            dd g_GDT                 ; address of GDT      
+
+g_Chloe:    db "Hiii, Max! Look, I dyed my hair blue!", 0
 
 times 510-($-$$) db 0
 dw 0AA55h
